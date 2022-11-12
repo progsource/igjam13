@@ -8,7 +8,9 @@ var parent_tile = null
 
 
 func _ready():
+	# warning-ignore:return_value_discarded
 	connect("mouse_entered", self, "_on_mouse_entered")
+	# warning-ignore:return_value_discarded
 	connect("mouse_exited", self, "_on_mouse_exited")
 
 
@@ -18,7 +20,7 @@ func _input(event) -> void:
 			return
 			
 		if event.button_index == BUTTON_LEFT and event.pressed:
-			G.emit_signal("connector_pressed", self, parent_tile)
+			G.emit_signal("connector_pressed", parent_tile, self)
 		
 
 func _on_mouse_entered() -> void:

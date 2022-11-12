@@ -1,6 +1,6 @@
 extends Node
 
-
+signal restart()
 signal available_moves_updated()
 # warning-ignore:unused_signal
 signal arrow_button_pressed(row, is_left)
@@ -8,6 +8,8 @@ signal arrow_button_pressed(row, is_left)
 signal arrow_buttons_enabled(enabled)
 # warning-ignore:unused_signal
 signal connector_pressed(connector_tile, connector)
+
+signal character_move_tried(tile, connector)
 
 
 enum GAME_STATE {
@@ -40,6 +42,12 @@ var available_moves := 0 setget set_available_moves
 
 
 var current_game_state = GAME_STATE.PAUSE
+var current_player_tile = null
+var current_player_connector = null
+var current_player_position := Vector2(-1, -1)
+var current_enemy_tile = null
+var current_enemy_connector = null
+var current_enemy_position := Vector2(-1, -1)
 
 
 func _ready():
@@ -49,3 +57,8 @@ func _ready():
 func set_available_moves(value: int) -> void:
 	available_moves = value
 	emit_signal("available_moves_updated")
+
+
+func print_test(s) -> void:
+	if OS.is_debug_build():
+		print(s)

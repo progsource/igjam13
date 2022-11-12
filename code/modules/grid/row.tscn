@@ -22,62 +22,77 @@ margin_right = 588.0
 margin_bottom = 32.0
 
 [node name="Tile" parent="HBoxContainer" instance=ExtResource( 1 )]
+pos = Vector2( 0, -1 )
 
 [node name="Tile2" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 36.0
 margin_right = 68.0
+pos = Vector2( 1, -1 )
 
 [node name="Tile3" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 72.0
 margin_right = 104.0
+pos = Vector2( 2, -1 )
 
 [node name="Tile4" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 108.0
 margin_right = 140.0
+pos = Vector2( 3, -1 )
 
 [node name="Tile5" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 144.0
 margin_right = 176.0
+pos = Vector2( 4, -1 )
 
 [node name="Tile6" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 180.0
 margin_right = 212.0
+pos = Vector2( 5, -1 )
 
 [node name="Tile7" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 216.0
 margin_right = 248.0
+pos = Vector2( 6, -1 )
 
 [node name="Tile8" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 252.0
 margin_right = 284.0
+pos = Vector2( 7, -1 )
 
 [node name="Tile9" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 288.0
 margin_right = 320.0
+pos = Vector2( 8, -1 )
 
 [node name="Tile10" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 324.0
 margin_right = 356.0
+pos = Vector2( 9, -1 )
 
 [node name="Tile11" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 360.0
 margin_right = 392.0
+pos = Vector2( 10, -1 )
 
 [node name="Tile12" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 396.0
 margin_right = 428.0
+pos = Vector2( 11, -1 )
 
 [node name="Tile13" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 432.0
 margin_right = 464.0
+pos = Vector2( 12, -1 )
 
 [node name="Tile14" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 468.0
 margin_right = 500.0
+pos = Vector2( 13, -1 )
 
 [node name="Tile15" parent="HBoxContainer" instance=ExtResource( 1 )]
 margin_left = 504.0
 margin_right = 536.0
+pos = Vector2( 14, -1 )
 
 [node name="ScrollContainer" type="ScrollContainer" parent="."]
 visible = false

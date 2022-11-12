@@ -54,29 +54,35 @@ margin_left = 26.0
 margin_top = 6.0
 margin_right = 32.0
 margin_bottom = 12.0
+connection_point = 2
 
 [node name="RightBottomConnector" parent="Background" instance=ExtResource( 3 )]
 margin_left = 26.0
 margin_top = 20.0
 margin_right = 32.0
 margin_bottom = 26.0
+connection_point = 3
 
 [node name="BottomRightConnector" parent="Background" instance=ExtResource( 3 )]
 margin_left = 20.0
 margin_top = 26.0
 margin_right = 26.0
 margin_bottom = 32.0
+connection_point = 4
 
 [node name="BottomLeftConnector" parent="Background" instance=ExtResource( 3 )]
 margin_left = 6.0
 margin_top = 26.0
 margin_right = 12.0
 margin_bottom = 32.0
+connection_point = 5
 
 [node name="LeftBottomConnector" parent="Background" instance=ExtResource( 3 )]
 margin_top = 20.0
 margin_bottom = 26.0
+connection_point = 6
 
 [node name="LeftTopConnector" parent="Background" instance=ExtResource( 3 )]
 margin_top = 6.0
 margin_bottom = 12.0
+connection_point = 7

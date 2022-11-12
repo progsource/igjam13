@@ -11,3 +11,5 @@ func _on_connector_pressed(tile, connector) -> void:
 		return
 	print(tile)
 	print(connector)
+	
+	G.emit_signal("character_move_tried", tile, connector)

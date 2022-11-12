@@ -11,6 +11,7 @@ const CONNECTION_IMAGE_POSITION_FAR_CORNER := 7 * 32
 
 var possible_connections := 4
 var connections := []
+export var pos := Vector2(-1, -1)
 
 
 onready var _connectors := [
@@ -33,32 +34,6 @@ func _ready():
 	_reset_lines()
 	_initialize_connections()
 	_display_connections()
-
-
-func _input(event) -> void:
-	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
-		
-		if $Background/TopRightConnector.get_global_rect().has_point(event.position):
-			print("top right")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.TOP_RIGHT)
-		elif $Background/RightTopConnector.get_global_rect().has_point(event.position):
-			print("right top")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.RIGHT_TOP)
-		elif $Background/RightBottomConnector.get_global_rect().has_point(event.position):
-			print("right bottom")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.RIGHT_BOTTOM)
-		elif $Background/BottomRightConnector.get_global_rect().has_point(event.position):
-			print("bottom right")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.BOTTOM_RIGHT)
-		elif $Background/BottomLeftConnector.get_global_rect().has_point(event.position):
-			print("bottom left")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.BOTTOM_LEFT)
-		elif $Background/LeftBottomConnector.get_global_rect().has_point(event.position):
-			print("left bottom")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.LEFT_BOTTOM)
-		elif $Background/LeftTopConnector.get_global_rect().has_point(event.position):
-			print("left top")
-			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.LEFT_TOP)
 
 
 func _initialize_connections() -> void:
@@ -302,14 +277,11 @@ func _display_connections() -> void:
 						line.rotation_degrees = 270.0
 					G.CONNECTION_POINTS.LEFT_TOP:
 						assert(false)
-				
-		
-#		line.region_rect.position.x =
-		
+
 		line.visible = true
 
 
-func get_connected_position( other: int) -> int:
+func get_connected_position(other: int) -> int:
 	for connection in connections:
 		if int(connection.x) == other:
 			return int(connection.y)
@@ -317,3 +289,45 @@ func get_connected_position( other: int) -> int:
 			return int(connection.x)
 	
 	return -1
+
+
+func has_connection(connector: int, other_tile: Control, other_connector: int) -> bool:
+	var additional_connector = get_connected_position(connector)
+	var additional_other_connector = other_tile.get_connected_position(other_connector)
+	
+	if other_tile.pos.x == pos.x:
+		if other_tile.pos.y == pos.y - 1:
+			# self is down
+			
+			var is_bottom_left = other_connector == G.CONNECTION_POINTS.BOTTOM_LEFT or additional_other_connector == G.CONNECTION_POINTS.BOTTOM_LEFT
+			var is_bottom_right = other_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT or additional_other_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT
+			var is_top_left = connector == G.CONNECTION_POINTS.TOP_LEFT or additional_connector == G.CONNECTION_POINTS.TOP_LEFT
+			var is_top_right = connector == G.CONNECTION_POINTS.TOP_RIGHT or additional_connector == G.CONNECTION_POINTS.TOP_RIGHT
+
+			if not is_bottom_left and not is_bottom_right:
+				return false
+			elif not is_top_left and not is_top_right:
+				return false
+			elif (is_bottom_left and is_top_left) or (is_bottom_right and is_bottom_right):
+				return true
+			
+			return false
+		elif other_tile.pos.y == pos.y + 1:
+			# self is up
+			
+			var is_bottom_left = connector == G.CONNECTION_POINTS.BOTTOM_LEFT or additional_connector == G.CONNECTION_POINTS.BOTTOM_LEFT
+			var is_bottom_right = connector == G.CONNECTION_POINTS.BOTTOM_RIGHT or additional_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT
+			var is_top_left = other_connector == G.CONNECTION_POINTS.TOP_LEFT or additional_other_connector == G.CONNECTION_POINTS.TOP_LEFT
+			var is_top_right = other_connector == G.CONNECTION_POINTS.TOP_RIGHT or additional_other_connector == G.CONNECTION_POINTS.TOP_RIGHT
+
+			if not is_bottom_left and not is_bottom_right:
+				return false
+			elif not is_top_left and not is_top_right:
+				return false
+			elif (is_bottom_left and is_top_left) or (is_bottom_right and is_bottom_right):
+				return true
+		else:
+			return false
+
+
+	return false
