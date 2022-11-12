@@ -1,5 +1,6 @@
 extends Node
 
+# warning-ignore:unused_signal
 signal restart()
 signal available_moves_updated()
 # warning-ignore:unused_signal
@@ -9,6 +10,7 @@ signal arrow_buttons_enabled(enabled)
 # warning-ignore:unused_signal
 signal connector_pressed(connector_tile, connector)
 
+# warning-ignore:unused_signal
 signal character_move_tried(tile, connector)
 
 

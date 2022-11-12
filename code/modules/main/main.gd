@@ -69,12 +69,7 @@ func _on_character_move_tried(tile, connector) -> void:
 	var tile_position = tile.pos
 	var player_position = G.current_player_position
 	var is_player_on_start = player_position.y == 6
-	
-	G.print_test("tile:")
-	G.print_test(tile_position)
-	G.print_test("player:")
-	G.print_test(player_position)
-	
+
 	if tile_position.y == player_position.y - 1:
 		if tile_position.x == player_position.x:
 			G.print_test("trying to move up")

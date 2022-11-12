@@ -6,6 +6,7 @@ const RowScene = preload("res://modules/grid/row.tscn")
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
+# warning-ignore:return_value_discarded
 	G.connect("restart", self, "restart")
 
 
@@ -20,10 +21,10 @@ func restart() -> void:
 		add_child(row)
 
 
-func is_possible_move(tile, connector, is_player) -> bool:
-#	if is_player:
-#
-	return false
+#func is_possible_move(tile, connector, is_player) -> bool:
+##	if is_player:
+##
+#	return false
 
 
 #func get_tile_at(x: int, y: int) -> Control:
