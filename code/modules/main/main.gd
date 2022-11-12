@@ -86,12 +86,20 @@ func _on_character_move_tried(tile, connector) -> void:
 				G.current_player_position.y = tile_position.y
 				G.current_player_connector = connector
 				G.current_player_tile = tile
+				G.available_moves -= 1
 				$PlayerCharacter.position.x += 8 if connector.connection_point == G.CONNECTION_POINTS.BOTTOM_RIGHT else -8
 				$PlayerCharacter.position.y -= 24
+				return
 			else:
 				print("check if points are connected")
 				if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
 					G.print_test("do move up")
+					G.current_player_position.y = tile_position.y
+					G.current_player_connector = connector
+					G.current_player_tile = tile
+					G.available_moves -= 1
+					$PlayerCharacter.position = connector.get_global_position()
+					return
 				else:
 					G.print_test("points are not connected")
 					return
@@ -107,16 +115,46 @@ func _on_character_move_tried(tile, connector) -> void:
 			G.print_test("move not possible")
 		elif tile_position.x == player_position.x - 1:
 			G.print_test("trying to move left")
-			pass
+			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
+				G.print_test("do move left")
+				G.current_player_position.x = tile_position.x
+				G.current_player_connector = connector
+				G.current_player_tile = tile
+				G.available_moves -= 1
+				$PlayerCharacter.position = connector.get_global_position()
+				return
+			else:
+				G.print_test("points are not connected")
+				return
 		elif tile_position.x == player_position.x + 1:
 			G.print_test("trying to move right")
-			pass
+			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
+				G.print_test("do move right")
+				G.current_player_position.x = tile_position.x
+				G.current_player_connector = connector
+				G.current_player_tile = tile
+				G.available_moves -= 1
+				$PlayerCharacter.position = connector.get_global_position()
+				return
+			else:
+				G.print_test("points are not connected")
+				return
 		else:
 			G.print_test("move not possible")
 	elif tile_position.y == player_position.y + 1:
 		if tile_position.x == player_position.x:
 			G.print_test("trying to move down")
-			pass
+			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
+				G.print_test("do move down")
+				G.current_player_position.y = tile_position.y
+				G.current_player_connector = connector
+				G.current_player_tile = tile
+				G.available_moves -= 1
+				$PlayerCharacter.position = connector.get_global_position()
+				return
+			else:
+				G.print_test("points are not connected")
+				return
 		else:
 			G.print_test("move not possible")
 	else:

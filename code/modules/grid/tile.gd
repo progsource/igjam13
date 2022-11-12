@@ -304,11 +304,7 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			var is_top_left = connector == G.CONNECTION_POINTS.TOP_LEFT or additional_connector == G.CONNECTION_POINTS.TOP_LEFT
 			var is_top_right = connector == G.CONNECTION_POINTS.TOP_RIGHT or additional_connector == G.CONNECTION_POINTS.TOP_RIGHT
 
-			if not is_bottom_left and not is_bottom_right:
-				return false
-			elif not is_top_left and not is_top_right:
-				return false
-			elif (is_bottom_left and is_top_left) or (is_bottom_right and is_bottom_right):
+			if (is_bottom_left and is_top_left) or (is_bottom_right and is_top_right):
 				return true
 			
 			return false
@@ -320,14 +316,33 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			var is_top_left = other_connector == G.CONNECTION_POINTS.TOP_LEFT or additional_other_connector == G.CONNECTION_POINTS.TOP_LEFT
 			var is_top_right = other_connector == G.CONNECTION_POINTS.TOP_RIGHT or additional_other_connector == G.CONNECTION_POINTS.TOP_RIGHT
 
-			if not is_bottom_left and not is_bottom_right:
-				return false
-			elif not is_top_left and not is_top_right:
-				return false
-			elif (is_bottom_left and is_top_left) or (is_bottom_right and is_bottom_right):
+			if (is_bottom_left and is_top_left) or (is_bottom_right and is_top_right):
 				return true
 		else:
 			return false
-
+	elif other_tile.pos.x == pos.x - 1:
+		# self is right
+		if other_tile.pos.y == pos.y:
+			var is_left_top = connector == G.CONNECTION_POINTS.LEFT_TOP or additional_connector == G.CONNECTION_POINTS.LEFT_TOP
+			var is_left_bottom = connector == G.CONNECTION_POINTS.LEFT_BOTTOM or additional_connector == G.CONNECTION_POINTS.LEFT_BOTTOM
+			var is_right_top = other_connector == G.CONNECTION_POINTS.RIGHT_TOP or additional_other_connector == G.CONNECTION_POINTS.RIGHT_TOP
+			var is_right_bottom = other_connector == G.CONNECTION_POINTS.RIGHT_BOTTOM or additional_other_connector == G.CONNECTION_POINTS.RIGHT_BOTTOM
+			
+			if (is_left_top and is_right_top) or (is_left_bottom and is_right_bottom):
+				return true
+		else:
+			return false
+	elif other_tile.pos.x == pos.x + 1:
+		# self is left
+		if other_tile.pos.y == pos.y:
+			var is_left_top = other_connector == G.CONNECTION_POINTS.LEFT_TOP or additional_other_connector == G.CONNECTION_POINTS.LEFT_TOP
+			var is_left_bottom = other_connector == G.CONNECTION_POINTS.LEFT_BOTTOM or additional_other_connector == G.CONNECTION_POINTS.LEFT_BOTTOM
+			var is_right_top = connector == G.CONNECTION_POINTS.RIGHT_TOP or additional_connector == G.CONNECTION_POINTS.RIGHT_TOP
+			var is_right_bottom = connector == G.CONNECTION_POINTS.RIGHT_BOTTOM or additional_connector == G.CONNECTION_POINTS.RIGHT_BOTTOM
+			
+			if (is_left_top and is_right_top) or (is_left_bottom and is_right_bottom):
+				return true
+		else:
+			return false
 
 	return false
