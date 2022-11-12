@@ -1,18 +1,6 @@
 extends Control
 
 
-enum CONNECTION_POINTS {
-	TOP_LEFT,
-	TOP_RIGHT,
-	RIGHT_TOP,
-	RIGHT_BOTTOM,
-	BOTTOM_RIGHT,
-	BOTTOM_LEFT,
-	LEFT_BOTTOM,
-	LEFT_TOP,
-}
-
-
 const CONNECTION_IMAGE_POSITION_CORNER := 2 * 32
 const CONNECTION_IMAGE_POSITION_LINE_CORNER := 3 * 32
 const CONNECTION_IMAGE_POSITION_OVER_CROSS := 4 * 32
@@ -25,16 +13,58 @@ var possible_connections := 4
 var connections := []
 
 
+onready var _connectors := [
+	$Background/TopLeftConnector,
+	$Background/TopRightConnector,
+	$Background/RightTopConnector,
+	$Background/RightBottomConnector,
+	$Background/BottomRightConnector,
+	$Background/BottomLeftConnector,
+	$Background/LeftBottomConnector,
+	$Background/LeftTopConnector,
+]
+
+
 func _ready():
+	for con in _connectors:
+		con.color.a = 0
+		con.parent_tile = self
+	
 	_reset_lines()
 	_initialize_connections()
 	_display_connections()
 
 
+func _input(event) -> void:
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		
+		if $Background/TopRightConnector.get_global_rect().has_point(event.position):
+			print("top right")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.TOP_RIGHT)
+		elif $Background/RightTopConnector.get_global_rect().has_point(event.position):
+			print("right top")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.RIGHT_TOP)
+		elif $Background/RightBottomConnector.get_global_rect().has_point(event.position):
+			print("right bottom")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.RIGHT_BOTTOM)
+		elif $Background/BottomRightConnector.get_global_rect().has_point(event.position):
+			print("bottom right")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.BOTTOM_RIGHT)
+		elif $Background/BottomLeftConnector.get_global_rect().has_point(event.position):
+			print("bottom left")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.BOTTOM_LEFT)
+		elif $Background/LeftBottomConnector.get_global_rect().has_point(event.position):
+			print("left bottom")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.LEFT_BOTTOM)
+		elif $Background/LeftTopConnector.get_global_rect().has_point(event.position):
+			print("left top")
+			G.emit_signal("connector_pressed", self, G.CONNECTION_POINTS.LEFT_TOP)
+
+
 func _initialize_connections() -> void:
 	var available_connections := []
-	available_connections.resize(CONNECTION_POINTS.size())
-	for i in range(0, CONNECTION_POINTS.size()):
+	available_connections.resize(G.CONNECTION_POINTS.size())
+	for i in range(0, G.CONNECTION_POINTS.size()):
 		available_connections[i] = i
 
 	for _i in range(0, possible_connections):
@@ -64,213 +94,213 @@ func _display_connections() -> void:
 		
 		match int(connection.x):
 			# from TOP_LEFT
-			CONNECTION_POINTS.TOP_LEFT:
+			G.CONNECTION_POINTS.TOP_LEFT:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						assert(false)
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 			
 			# from TOP_RIGHT
-			CONNECTION_POINTS.TOP_RIGHT:
+			G.CONNECTION_POINTS.TOP_RIGHT:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						assert(false)
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.flip_h = true
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 						line.rotation_degrees = 90.0
 						line.flip_h = true
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.flip_h = true
 						line.rotation_degrees = 270.0
 			
 			# from RIGHT_TOP
-			CONNECTION_POINTS.RIGHT_TOP:
+			G.CONNECTION_POINTS.RIGHT_TOP:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						assert(false)
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 						line.rotation_degrees = 180.0
 			
 			# from RIGHT_BOTTOM
-			CONNECTION_POINTS.RIGHT_BOTTOM:
+			G.CONNECTION_POINTS.RIGHT_BOTTOM:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.flip_h = true
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						assert(false)
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 270.0
 						line.flip_v = true
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 						line.flip_v = true
 			
 			# from BOTTOM_RIGHT
-			CONNECTION_POINTS.BOTTOM_RIGHT:
+			G.CONNECTION_POINTS.BOTTOM_RIGHT:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						assert(false)
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 						line.rotation_degrees = 270.0
 			
 			# from BOTTOM_LEFT
-			CONNECTION_POINTS.BOTTOM_LEFT:
+			G.CONNECTION_POINTS.BOTTOM_LEFT:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 						line.rotation_degrees = 90.0
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 						line.rotation_degrees = 90.0
 						line.flip_h = true
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 270.0
 						line.flip_v = true
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						assert(false)
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.flip_v = true
 			
 			# from LEFT_BOTTOM
-			CONNECTION_POINTS.LEFT_BOTTOM:
+			G.CONNECTION_POINTS.LEFT_BOTTOM:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						assert(false)
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 270.0
 			
 			# from LEFT_TOP
-			CONNECTION_POINTS.LEFT_TOP:
+			G.CONNECTION_POINTS.LEFT_TOP:
 				match int(connection.y):
-					CONNECTION_POINTS.TOP_LEFT:
+					G.CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
-					CONNECTION_POINTS.TOP_RIGHT:
+					G.CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.flip_h = true
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.RIGHT_TOP:
+					G.CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 						line.rotation_degrees = 180.0
-					CONNECTION_POINTS.RIGHT_BOTTOM:
+					G.CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 						line.flip_v = true
-					CONNECTION_POINTS.BOTTOM_RIGHT:
+					G.CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.BOTTOM_LEFT:
+					G.CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 						line.flip_v = true
-					CONNECTION_POINTS.LEFT_BOTTOM:
+					G.CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 270.0
-					CONNECTION_POINTS.LEFT_TOP:
+					G.CONNECTION_POINTS.LEFT_TOP:
 						assert(false)
 				
 		

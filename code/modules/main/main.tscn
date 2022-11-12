@@ -1,4 +1,4 @@
-[gd_scene load_steps=7 format=2]
+[gd_scene load_steps=8 format=2]
 
 [ext_resource path="res://modules/hud/hud.tscn" type="PackedScene" id=1]
 [ext_resource path="res://modules/grid/grid.tscn" type="PackedScene" id=2]
@@ -6,8 +6,10 @@
 [ext_resource path="res://modules/player/goal.tscn" type="PackedScene" id=4]
 [ext_resource path="res://modules/player/pc.tscn" type="PackedScene" id=5]
 [ext_resource path="res://assets/fonts/font_hud.tres" type="DynamicFont" id=6]
+[ext_resource path="res://modules/main/main.gd" type="Script" id=7]
 
 [node name="Main" type="Node2D"]
+script = ExtResource( 7 )
 
 [node name="HUD" parent="." instance=ExtResource( 1 )]
 
@@ -25,14 +27,14 @@ position = Vector2( 461, 56 )
 [node name="PlayerCharacter" parent="." instance=ExtResource( 5 )]
 position = Vector2( 207, 336 )
 
-[node name="CanvasLayer" type="CanvasLayer" parent="."]
+[node name="PauseLayer" type="CanvasLayer" parent="."]
 
-[node name="Panel" type="ColorRect" parent="CanvasLayer"]
+[node name="Panel" type="ColorRect" parent="PauseLayer"]
 anchor_right = 1.0
 anchor_bottom = 1.0
 color = Color( 0.0588235, 0.282353, 0.121569, 0.486275 )
 
-[node name="StartButton" type="Button" parent="CanvasLayer/Panel"]
+[node name="StartButton" type="Button" parent="PauseLayer/Panel"]
 anchor_left = 0.5
 anchor_top = 0.5
 anchor_right = 0.5

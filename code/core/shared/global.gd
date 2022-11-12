@@ -1,8 +1,51 @@
 extends Node
 
 
+signal available_moves_updated()
+# warning-ignore:unused_signal
+signal arrow_button_pressed(row, is_left)
+# warning-ignore:unused_signal
+signal arrow_buttons_enabled(enabled)
+# warning-ignore:unused_signal
+signal connector_pressed(connector_tile, connector)
+
+
+enum GAME_STATE {
+	PAUSE,
+	PC_ROW_TURN,
+	PC_MOVE_TURN,
+	AI_ROW_TURN,
+	AI_MOVE_TURN,
+}
+
+enum CONNECTION_POINTS {
+	TOP_LEFT,
+	TOP_RIGHT,
+	RIGHT_TOP,
+	RIGHT_BOTTOM,
+	BOTTOM_RIGHT,
+	BOTTOM_LEFT,
+	LEFT_BOTTOM,
+	LEFT_TOP,
+}
+
+
+const MAX_AVAILABLE_MOVES := 40
+
+
 onready var rng := RandomNumberGenerator.new()
+
+
+var available_moves := 0 setget set_available_moves
+
+
+var current_game_state = GAME_STATE.PAUSE
 
 
 func _ready():
 	rng.randomize()
+
+
+func set_available_moves(value: int) -> void:
+	available_moves = value
+	emit_signal("available_moves_updated")

@@ -1,8 +1,10 @@
-[gd_scene load_steps=2 format=2]
+[gd_scene load_steps=3 format=2]
 
 [ext_resource path="res://assets/fonts/font_hud.tres" type="DynamicFont" id=1]
+[ext_resource path="res://modules/hud/hud.gd" type="Script" id=2]
 
 [node name="HUD" type="CanvasLayer"]
+script = ExtResource( 2 )
 
 [node name="Top" type="HBoxContainer" parent="."]
 anchor_right = 1.0
@@ -12,32 +14,32 @@ margin_right = -20.0
 alignment = 1
 
 [node name="Label" type="Label" parent="Top"]
-margin_left = 64.0
+margin_left = 58.0
 margin_top = 3.0
-margin_right = 188.0
+margin_right = 182.0
 margin_bottom = 27.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 1 )
 text = "moves left:"
 
-[node name="Label2" type="Label" parent="Top"]
-margin_left = 192.0
+[node name="Moves" type="Label" parent="Top"]
+margin_left = 186.0
 margin_top = 3.0
-margin_right = 216.0
+margin_right = 222.0
 margin_bottom = 27.0
 custom_colors/font_color = Color( 0, 0, 0, 1 )
 custom_fonts/font = ExtResource( 1 )
-text = "40"
+text = "100"
 
 [node name="MarginContainer" type="MarginContainer" parent="Top"]
-margin_left = 220.0
-margin_right = 420.0
+margin_left = 226.0
+margin_right = 426.0
 margin_bottom = 30.0
 rect_min_size = Vector2( 200, 0 )
 
 [node name="Button" type="Button" parent="Top"]
-margin_left = 424.0
-margin_right = 536.0
+margin_left = 430.0
+margin_right = 542.0
 margin_bottom = 30.0
 custom_fonts/font = ExtResource( 1 )
 text = "next turn"

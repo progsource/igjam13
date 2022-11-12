@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://modules/grid/connector.gd" type="Script" id=1]
+
+[node name="Connector" type="ColorRect"]
+margin_right = 6.0
+margin_bottom = 6.0
+mouse_default_cursor_shape = 2
+color = Color( 0.690196, 0.913725, 0.964706, 1 )
+script = ExtResource( 1 )
