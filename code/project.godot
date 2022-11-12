@@ -15,6 +15,10 @@ config/description="A crazy labyrinth."
 run/main_scene="res://modules/main/main.tscn"
 config/icon="res://icon.png"
 
+[autoload]
+
+G="*res://core/shared/global.gd"
+
 [display]
 
 window/size/width=640
@@ -38,4 +42,5 @@ quality/intended_usage/framebuffer_allocation.mobile=1
 2d/snapping/use_gpu_pixel_snap=true
 vram_compression/import_etc=true
 vram_compression/import_etc2=false
+environment/default_clear_color=Color( 0.772549, 1, 0.768627, 1 )
 environment/default_environment="res://default_env.tres"
