@@ -20,7 +20,7 @@ const CONNECTION_IMAGE_POSITION_SAME_BORDER := 6 * 32
 const CONNECTION_IMAGE_POSITION_FAR_CORNER := 7 * 32
 
 
-var possible_connections := 1
+var possible_connections := 4
 var connections := []
 
 
@@ -36,11 +36,6 @@ func _initialize_connections() -> void:
 	for i in range(0, CONNECTION_POINTS.size()):
 		available_connections[i] = i
 
-#	connections.append(Vector2(CONNECTION_POINTS.TOP_LEFT, CONNECTION_POINTS.TOP_RIGHT))
-#	connections.append(Vector2(CONNECTION_POINTS.LEFT_TOP, CONNECTION_POINTS.LEFT_BOTTOM))
-#	connections.append(Vector2(CONNECTION_POINTS.BOTTOM_LEFT, CONNECTION_POINTS.BOTTOM_RIGHT))
-#	connections.append(Vector2(CONNECTION_POINTS.RIGHT_BOTTOM, CONNECTION_POINTS.RIGHT_TOP))
-
 	for _i in range(0, possible_connections):
 		var connection_point_a = available_connections[G.rng.randi_range(0, available_connections.size() - 1)]
 		available_connections.erase(connection_point_a)
@@ -55,6 +50,8 @@ func _reset_lines() -> void:
 		var line = get_node("Background/Line%d" % [i + 1]) as Sprite
 		line.visible = false
 		line.rotation_degrees = 0.0
+		line.flip_h = false
+		line.flip_v = false
 
 
 func _display_connections() -> void:
@@ -74,12 +71,16 @@ func _display_connections() -> void:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 					CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
 					CONNECTION_POINTS.LEFT_TOP:
@@ -94,24 +95,33 @@ func _display_connections() -> void:
 						assert(false)
 					CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.flip_h = true
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
+						line.rotation_degrees = 90.0
+						line.flip_h = true
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
 					CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.flip_h = true
+						line.rotation_degrees = 270.0
 			
 			# from RIGHT_TOP
 			CONNECTION_POINTS.RIGHT_TOP:
 				match int(connection.y):
 					CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.RIGHT_TOP:
 						assert(false)
 					CONNECTION_POINTS.RIGHT_BOTTOM:
@@ -119,20 +129,25 @@ func _display_connections() -> void:
 						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
 					CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
+						line.rotation_degrees = 180.0
 			
 			# from RIGHT_BOTTOM
 			CONNECTION_POINTS.RIGHT_BOTTOM:
 				match int(connection.y):
 					CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.flip_h = true
 					CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 90.0
@@ -140,24 +155,32 @@ func _display_connections() -> void:
 						assert(false)
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 270.0
+						line.flip_v = true
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 					CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
+						line.flip_v = true
 			
 			# from BOTTOM_RIGHT
 			CONNECTION_POINTS.BOTTOM_RIGHT:
 				match int(connection.y):
 					CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						assert(false)
 					CONNECTION_POINTS.BOTTOM_LEFT:
@@ -165,20 +188,28 @@ func _display_connections() -> void:
 						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
+						line.rotation_degrees = 270.0
 			
 			# from BOTTOM_LEFT
 			CONNECTION_POINTS.BOTTOM_LEFT:
 				match int(connection.y):
 					CONNECTION_POINTS.TOP_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
+						line.rotation_degrees = 90.0
 					CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
+						line.rotation_degrees = 90.0
+						line.flip_h = true
 					CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 270.0
+						line.flip_v = true
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 180.0
@@ -186,8 +217,10 @@ func _display_connections() -> void:
 						assert(false)
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.LEFT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.flip_v = true
 			
 			# from LEFT_BOTTOM
 			CONNECTION_POINTS.LEFT_BOTTOM:
@@ -202,8 +235,10 @@ func _display_connections() -> void:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						assert(false)
 					CONNECTION_POINTS.LEFT_TOP:
@@ -217,14 +252,20 @@ func _display_connections() -> void:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_CORNER
 					CONNECTION_POINTS.TOP_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.flip_h = true
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.RIGHT_TOP:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_STRAIGHT
+						line.rotation_degrees = 180.0
 					CONNECTION_POINTS.RIGHT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_OVER_CROSS
+						line.flip_v = true
 					CONNECTION_POINTS.BOTTOM_RIGHT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_FAR_CORNER
+						line.rotation_degrees = 270.0
 					CONNECTION_POINTS.BOTTOM_LEFT:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_LINE_CORNER
+						line.flip_v = true
 					CONNECTION_POINTS.LEFT_BOTTOM:
 						line.region_rect.position.x = CONNECTION_IMAGE_POSITION_SAME_BORDER
 						line.rotation_degrees = 270.0
