@@ -22,6 +22,7 @@ enum GAME_END_STATE {
 	GAME_OVER,
 	WON,
 }
+# warning-ignore:unused_signal
 signal end_state(state)
 
 
@@ -46,7 +47,7 @@ enum CONNECTION_POINTS {
 
 
 const MAX_AVAILABLE_MOVES := 40
-
+const MAX_TILES_PER_ROW := 14
 
 onready var rng := RandomNumberGenerator.new()
 

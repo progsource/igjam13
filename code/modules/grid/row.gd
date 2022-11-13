@@ -39,7 +39,7 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 	if row != a_row:
 		return
 	
-	print("row: %d - is_left: %s" % [a_row, is_left])
+	G.print_test("row: %d - is_left: %s" % [a_row, is_left])
 	
 	if _old_tile == null and _new_tile == null:
 		_new_tile = TileScene.instance()
@@ -48,15 +48,15 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 		_new_tile = _old_tile
 		_old_tile = null
 	
-	_new_tile.pos.x = 14 if is_left else 0
+	_new_tile.pos.x = G.MAX_TILES_PER_ROW if is_left else 0
 	_new_tile.pos.y = a_row
 	G.print_test("starting new tile pos:")
 	G.print_test(_new_tile.pos)
 	
 	if is_left:
 		_old_tile = tile_container.get_child(0)
-		tile_container.add_child(_new_tile)
 		tile_container.remove_child(_old_tile)
+		tile_container.add_child(_new_tile)
 		
 		for t in range($HBoxContainer.get_child_count()):
 			if t == $HBoxContainer.get_child_count() - 1:
@@ -79,11 +79,11 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 	if G.current_player_position.y == a_row:
 		if is_left:
 			if G.current_player_position.x == 0:
-				G.current_player_position.x = 14
+				G.current_player_position.x = G.MAX_TILES_PER_ROW
 			else:
 				G.current_player_position.x -= 1
 		else:
-			if G.current_player_position.x == 14:
+			if G.current_player_position.x == G.MAX_TILES_PER_ROW:
 				G.current_player_position.x = 0
 			else:
 				G.current_player_position.x += 1

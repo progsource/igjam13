@@ -66,7 +66,9 @@ func _on_goal_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void
 
 func _on_game_state_updated() -> void:
 	if G.current_game_state == G.GAME_STATE.AI_ROW_TURN:
-		$Grid.move_column(G.rng.randi_range(0, 14), G.rng.randi_range(0,100) > 50)
+		$Grid.move_column(
+			G.rng.randi_range(0, G.MAX_TILES_PER_ROW),
+			G.rng.randi_range(0,100) > 50)
 		G.current_game_state = G.GAME_STATE.PC_ROW_TURN # theoretically this would be the enemies move turn
 	elif G.current_game_state == G.GAME_STATE.PAUSE:
 		$PauseLayer.visible = true
@@ -93,7 +95,7 @@ func _restart() -> void:
 
 
 func _place_pc_start_position() -> void:
-	var x = G.rng.randi_range(0, 14)
+	var x = G.rng.randi_range(0, G.MAX_TILES_PER_ROW)
 	var left_most_x := 68
 	var multiplier := 36
 	var start_pos = Vector2(left_most_x + multiplier * x, 324)
@@ -110,7 +112,7 @@ func _place_pc_start_position() -> void:
 
 
 func _place_goal_position() -> void:
-	var x = G.rng.randi_range(0, 14)
+	var x = G.rng.randi_range(0, G.MAX_TILES_PER_ROW)
 	var left_most_x := 68
 	var multiplier := 36
 	var start_pos = Vector2(left_most_x + multiplier * x, 71)
@@ -130,7 +132,7 @@ func _on_arrow_button_pressed(_row: int, is_left: bool) -> void:
 	
 	if is_left and G.current_player_position.x == 0:
 		print("check if correct row, then let him spawn on the other side")
-	elif not is_left and G.current_player_position.x == 14:
+	elif not is_left and G.current_player_position.x == G.MAX_TILES_PER_ROW:
 		 print("check if correct row, then let him spawn on the other side")
 	
 	G.current_game_state = G.GAME_STATE.PC_MOVE_TURN
