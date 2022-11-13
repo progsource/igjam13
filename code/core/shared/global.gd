@@ -45,7 +45,7 @@ enum CONNECTION_POINTS {
 }
 
 
-const MAX_AVAILABLE_MOVES := 30
+const MAX_AVAILABLE_MOVES := 40
 
 
 onready var rng := RandomNumberGenerator.new()
