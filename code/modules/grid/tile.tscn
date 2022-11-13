@@ -91,3 +91,4 @@ connection_point = 7
 visible = false
 margin_right = 40.0
 margin_bottom = 14.0
+text = "(-1, -1)"

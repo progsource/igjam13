@@ -1,3 +1,4 @@
+tool
 extends Control
 
 
@@ -14,6 +15,13 @@ var connections := []
 export var pos := Vector2(-1, -1) setget set_pos
 var is_initialized = false
 
+export(G.CONNECTION_POINTS) var debug_first_connection_point
+export(G.CONNECTION_POINTS) var debug_second_connection_point
+export var is_debug_on := false setget set_is_debug_on
+
+
+		
+
 onready var _connectors := [
 	$Background/TopLeftConnector,
 	$Background/TopRightConnector,
@@ -25,6 +33,14 @@ onready var _connectors := [
 	$Background/LeftTopConnector,
 ]
 
+func set_is_debug_on(value):
+	is_debug_on = value
+	if is_debug_on:
+		_reset_lines()
+		connections.append(Vector2(debug_first_connection_point, debug_second_connection_point))
+		_display_connections()
+#		for con in _connectors:
+#			con.visible = false
 
 func set_pos(value: Vector2) -> void:
 	pos = value
@@ -37,6 +53,12 @@ func _ready():
 		con.parent_tile = self
 	
 	_reset_lines()
+	
+	if is_debug_on:
+		connections.append(Vector2(debug_first_connection_point, debug_second_connection_point))
+		_display_connections()
+		return
+		
 	_initialize_connections()
 	_display_connections()
 	$DebugLabel.text = "%s" % pos
