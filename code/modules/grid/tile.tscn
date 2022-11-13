@@ -88,5 +88,6 @@ margin_bottom = 12.0
 connection_point = 7
 
 [node name="DebugLabel" type="Label" parent="."]
+visible = false
 margin_right = 40.0
 margin_bottom = 14.0

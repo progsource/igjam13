@@ -12,7 +12,7 @@ const CONNECTION_IMAGE_POSITION_FAR_CORNER := 7 * 32
 var possible_connections := 4
 var connections := []
 export var pos := Vector2(-1, -1) setget set_pos
-
+var is_initialized = false
 
 onready var _connectors := [
 	$Background/TopLeftConnector,
@@ -40,6 +40,21 @@ func _ready():
 	_initialize_connections()
 	_display_connections()
 	$DebugLabel.text = "%s" % pos
+	is_initialized = true
+
+
+func _notification(what):
+	if not is_initialized:
+		return
+	if what == NOTIFICATION_PARENTED:
+		for con in _connectors:
+			con.color.a = 0
+			con.parent_tile = self
+	
+		_reset_lines()
+		_initialize_connections()
+		_display_connections()
+		$DebugLabel.text = "%s" % pos
 
 
 func _initialize_connections() -> void:

@@ -89,12 +89,6 @@ func move_column(pos_x: int, is_up: bool) -> void:
 
 
 func get_tile_at(x: int, y: int) -> Control:
-	var counter = -1
-	for c in get_children():
-		counter += 1
-		if counter == y:
-			return c.get_tile_at_x_position(x)
-	
-	return null
-
-
+	assert(y > -1)
+	assert(y < get_child_count())
+	return get_child(y).get_tile_at_x_position(x)

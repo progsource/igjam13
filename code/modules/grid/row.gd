@@ -58,10 +58,10 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 		tile_container.add_child(_new_tile)
 		tile_container.remove_child(_old_tile)
 		
-		for t in range($HBoxContainer.get_children().size()):
-			if t == $HBoxContainer.get_children().size() - 1:
+		for t in range($HBoxContainer.get_child_count()):
+			if t == $HBoxContainer.get_child_count() - 1:
 				continue
-			$HBoxContainer.get_children()[t].pos.x -= 1
+			$HBoxContainer.get_child(t).pos.x -= 1
 	else:
 		_old_tile = tile_container.get_child((tile_container.get_child_count() - 1))
 		tile_container.add_child(_new_tile)
