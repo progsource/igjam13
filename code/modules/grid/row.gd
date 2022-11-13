@@ -58,9 +58,8 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 		tile_container.remove_child(_old_tile)
 		tile_container.add_child(_new_tile)
 		
-		for t in range($HBoxContainer.get_child_count()):
-			if t == $HBoxContainer.get_child_count() - 1:
-				continue
+		# do not change the just added child
+		for t in range($HBoxContainer.get_child_count() - 1):
 			$HBoxContainer.get_child(t).pos.x -= 1
 	else:
 		_old_tile = tile_container.get_child((tile_container.get_child_count() - 1))
@@ -73,28 +72,28 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 				first_skipped = true
 				continue
 			t.pos.x += 1
-	G.print_test("current player pos:")
-	G.print_test(G.current_player_position)
-	G.print_test("a row: %d" % a_row)
-	if G.current_player_position.y == a_row:
+
+	_update_player_position(a_row, is_left)
+	_new_tile = null
+
+
+func _update_player_position(updated_row: int, is_left: bool) -> void:
+	if G.current_player_position.y == updated_row:
 		if is_left:
-			if G.current_player_position.x == 0:
+			if G.current_player_position.x == 0.0:
 				G.current_player_position.x = G.MAX_TILES_PER_ROW
 			else:
-				G.current_player_position.x -= 1
+				G.current_player_position.x -= 1.0
 		else:
-			if G.current_player_position.x == G.MAX_TILES_PER_ROW:
-				G.current_player_position.x = 0
+			if G.current_player_position.x == float(G.MAX_TILES_PER_ROW):
+				G.current_player_position.x = 0.0
 			else:
-				G.current_player_position.x += 1
-		G.print_test("new player pos:")
-		G.print_test(G.current_player_position)
+				G.current_player_position.x += 1.0
+
 		G.current_player_tile = tile_container.get_child(G.current_player_position.x)
 		G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+
 		G.emit_signal("player_position_updated")
-	G.print_test("new tile pos:")
-	G.print_test(_new_tile.pos)
-	_new_tile = null
 
 
 func get_tile_at_x_position(x: int) -> Control:
