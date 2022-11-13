@@ -43,13 +43,12 @@ func move_column(pos_x: int, is_up: bool) -> void:
 	if _old_tile == null and _new_tile == null:
 		_new_tile = TileScene.instance()
 		_new_tile.possible_connections = 4
-		_new_tile.pos.x = pos_x
 	elif _old_tile != null:
 		_new_tile = _old_tile
-		_new_tile.pos.x = pos_x
-		_new_tile.pos.y = 5 if is_up else 0
 		_old_tile = null
 	
+	_new_tile.pos.x = pos_x
+	_new_tile.pos.y = 5 if is_up else 0
 	_old_tile = tiles[0 if is_up else 5]
 	
 	if is_up:
@@ -75,23 +74,23 @@ func move_column(pos_x: int, is_up: bool) -> void:
 		if is_up:
 			if G.current_player_position.y == 0:
 				G.current_player_position.y = 5
-				G.current_player_tile = tiles[5]
+				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
 				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
 				G.emit_signal("player_position_updated")
 			else:
 				G.current_player_position.y -= 1
-				G.current_player_tile = tiles[G.current_player_position.y]
+				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
 				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
 				G.emit_signal("player_position_updated")
 		else:
 			if G.current_player_position.y == 5:
 				G.current_player_position.y = 0
-				G.current_player_tile = tiles[0]
+				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
 				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
 				G.emit_signal("player_position_updated")
 			else:
 				G.current_player_position.y += 1
-				G.current_player_tile = tiles[G.current_player_position.y]
+				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
 				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
 				G.emit_signal("player_position_updated")
 	_new_tile = null
@@ -102,10 +101,13 @@ func move_column(pos_x: int, is_up: bool) -> void:
 #	return false
 
 
-#func get_tile_at(x: int, y: int) -> Control:
-#	var counter = -1
-#	for c in get_children():
-#		counter += 1
-#		if counter == y:
-			
+func get_tile_at(x: int, y: int) -> Control:
+	var counter = -1
+	for c in get_children():
+		counter += 1
+		if counter == y:
+			return c.get_tile_at_x_position(x)
 	
+	return null
+
+

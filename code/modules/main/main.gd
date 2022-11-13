@@ -43,6 +43,8 @@ func _on_game_state_updated() -> void:
 	if G.current_game_state == G.GAME_STATE.AI_ROW_TURN:
 		$Grid.move_column(G.rng.randi_range(0, 14), G.rng.randi_range(0,100) > 50)
 		G.current_game_state = G.GAME_STATE.PC_ROW_TURN # theoretically this would be the enemies move turn
+	elif G.current_game_state == G.GAME_STATE.PAUSE:
+		$PauseLayer.visible = true
 
 
 func _restart() -> void:

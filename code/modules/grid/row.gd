@@ -46,9 +46,9 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 		_new_tile.possible_connections = 4
 	elif _old_tile != null:
 		_new_tile = _old_tile
-		_new_tile.pos.x = 14 if is_left else 0
 		_old_tile = null
-		
+	
+	_new_tile.pos.x = 14 if is_left else 0
 	_new_tile.pos.y = a_row
 	
 	if is_left:
