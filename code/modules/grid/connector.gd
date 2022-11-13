@@ -24,7 +24,8 @@ func _input(event) -> void:
 		
 
 func _on_mouse_entered() -> void:
-	color.a = 255
+	if G.current_game_state == G.GAME_STATE.PC_MOVE_TURN:
+		color.a = 255
 
 
 func _on_mouse_exited() -> void:

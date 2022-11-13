@@ -90,6 +90,7 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 				G.emit_signal("player_position_updated")
 	_new_tile = null
 
+
 func has_tile(tile: Control) -> bool:
 	return has_node(tile.get_path())
 

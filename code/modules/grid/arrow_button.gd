@@ -28,8 +28,9 @@ func _on_arrow_pressed():
 
 func _on_arrow_buttons_enabled(enabled: bool) -> void:
 	disabled = !enabled
+	modulate.a = 1.0 if enabled else 0.5
 
 
 func _on_game_state_updated() -> void:
 	if G.current_game_state == G.GAME_STATE.PC_ROW_TURN:
-		disabled = false
+		_on_arrow_buttons_enabled(true)
