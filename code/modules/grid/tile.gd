@@ -11,7 +11,7 @@ const CONNECTION_IMAGE_POSITION_FAR_CORNER := 7 * 32
 
 var possible_connections := 4
 var connections := []
-export var pos := Vector2(-1, -1)
+export var pos := Vector2(-1, -1) setget set_pos
 
 
 onready var _connectors := [
@@ -26,6 +26,11 @@ onready var _connectors := [
 ]
 
 
+func set_pos(value: Vector2) -> void:
+	pos = value
+	$DebugLabel.text = "%s" % pos
+
+
 func _ready():
 	for con in _connectors:
 		con.color.a = 0
@@ -34,6 +39,7 @@ func _ready():
 	_reset_lines()
 	_initialize_connections()
 	_display_connections()
+	$DebugLabel.text = "%s" % pos
 
 
 func _initialize_connections() -> void:
@@ -44,12 +50,16 @@ func _initialize_connections() -> void:
 		available_connections[i] = i
 
 	for _i in range(0, possible_connections):
-		var connection_point_a = available_connections[G.rng.randi_range(0, available_connections.size() - 1)]
+		var connection_point_a = _get_random_available_connection_point(available_connections)
 		available_connections.erase(connection_point_a)
-		var connection_point_b = available_connections[G.rng.randi_range(0, available_connections.size() - 1)]
+		var connection_point_b = _get_random_available_connection_point(available_connections)
 		available_connections.erase(connection_point_b)
 
 		connections.append(Vector2(connection_point_a, connection_point_b))
+
+
+func _get_random_available_connection_point(available_connections) -> int:
+	return available_connections[G.rng.randi_range(0, available_connections.size() - 1)]
 
 
 func _reset_lines() -> void:
@@ -303,7 +313,7 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 	
 	if other_tile.pos.x == pos.x:
 		if other_tile.pos.y == pos.y - 1:
-			# self is down
+			G.print_test("self is down")
 			
 			var is_bottom_left = other_connector == G.CONNECTION_POINTS.BOTTOM_LEFT or additional_other_connector == G.CONNECTION_POINTS.BOTTOM_LEFT
 			var is_bottom_right = other_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT or additional_other_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT
@@ -320,7 +330,7 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			
 			return false
 		elif other_tile.pos.y == pos.y + 1:
-			# self is up
+			G.print_test("self is up")
 			
 			var is_bottom_left = connector == G.CONNECTION_POINTS.BOTTOM_LEFT or additional_connector == G.CONNECTION_POINTS.BOTTOM_LEFT
 			var is_bottom_right = connector == G.CONNECTION_POINTS.BOTTOM_RIGHT or additional_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT
@@ -337,7 +347,7 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 		else:
 			return false
 	elif other_tile.pos.x == pos.x - 1:
-		# self is right
+		G.print_test("self is right")
 		if other_tile.pos.y == pos.y:
 			var is_left_top = connector == G.CONNECTION_POINTS.LEFT_TOP or additional_connector == G.CONNECTION_POINTS.LEFT_TOP
 			var is_left_bottom = connector == G.CONNECTION_POINTS.LEFT_BOTTOM or additional_connector == G.CONNECTION_POINTS.LEFT_BOTTOM
@@ -354,7 +364,7 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 		else:
 			return false
 	elif other_tile.pos.x == pos.x + 1:
-		# self is left
+		G.print_test("self is left")
 		if other_tile.pos.y == pos.y:
 			var is_left_top = other_connector == G.CONNECTION_POINTS.LEFT_TOP or additional_other_connector == G.CONNECTION_POINTS.LEFT_TOP
 			var is_left_bottom = other_connector == G.CONNECTION_POINTS.LEFT_BOTTOM or additional_other_connector == G.CONNECTION_POINTS.LEFT_BOTTOM
@@ -376,6 +386,7 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 
 func get_connector_by_enum(value: int) -> ColorRect:
 	if value < 0 or value >= _connectors.size():
+		assert(false)
 		return null
 	
 	return _connectors[value]

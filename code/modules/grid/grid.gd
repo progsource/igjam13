@@ -70,35 +70,22 @@ func move_column(pos_x: int, is_up: bool) -> void:
 		get_child(0).replace_tile_at_x_position(pos_x, _new_tile)
 		tiles[0] = _new_tile
 	
-	if G.current_player_position.x == pos_x:
+	if G.current_player_position.x == pos_x and G.current_player_position.y != 6:
 		if is_up:
 			if G.current_player_position.y == 0:
 				G.current_player_position.y = 5
-				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
 			else:
 				G.current_player_position.y -= 1
-				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
 		else:
 			if G.current_player_position.y == 5:
 				G.current_player_position.y = 0
-				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
 			else:
 				G.current_player_position.y += 1
-				G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
-	_new_tile = null
 
-#func is_possible_move(tile, connector, is_player) -> bool:
-##	if is_player:
-##
-#	return false
+		G.current_player_tile = get_tile_at(G.current_player_position.x, G.current_player_position.y)
+		G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+		G.emit_signal("player_position_updated")
+	_new_tile = null
 
 
 func get_tile_at(x: int, y: int) -> Control:

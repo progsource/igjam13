@@ -24,6 +24,21 @@ func _ready():
 	
 	# warning-ignore:return_value_discarded
 	G.connect("end_state", self, "_on_end_state_changed")
+	
+	G.connect("player_position_updated", self, "_on_player_position_updated")
+
+
+func _on_player_position_updated() -> void:
+	G.print_test("on player pos change")
+	G.print_test(G.current_player_connector.parent_tile.pos)
+	G.print_test("pc pos")
+	G.print_test($PlayerCharacter.position)
+	call_deferred("_update_pc_pos_now")
+
+
+func _update_pc_pos_now():
+	$PlayerCharacter.position = G.current_player_connector.get_global_position()
+	G.print_test($PlayerCharacter.position)
 
 
 func _on_end_state_changed(state: int) -> void:
@@ -141,21 +156,20 @@ func _on_character_move_tried(tile, connector) -> void:
 			elif is_player_on_start:
 				G.print_test("do move up from start")
 				G.current_player_position.y = tile_position.y
-				G.current_player_connector = connector
 				G.current_player_tile = tile
+				G.current_player_connector = connector
 				G.available_moves -= 1
-				$PlayerCharacter.position.x += 8 if connector.connection_point == G.CONNECTION_POINTS.BOTTOM_RIGHT else -8
-				$PlayerCharacter.position.y -= 24
+				G.emit_signal("player_position_updated")
 				return
 			else:
 				print("check if points are connected")
 				if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
 					G.print_test("do move up")
 					G.current_player_position.y = tile_position.y
-					G.current_player_connector = connector
 					G.current_player_tile = tile
+					G.current_player_connector = connector
 					G.available_moves -= 1
-					$PlayerCharacter.position = connector.get_global_position()
+					G.emit_signal("player_position_updated")
 					return
 				else:
 					G.print_test("points are not connected")
@@ -175,10 +189,10 @@ func _on_character_move_tried(tile, connector) -> void:
 			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
 				G.print_test("do move left")
 				G.current_player_position.x = tile_position.x
-				G.current_player_connector = connector
 				G.current_player_tile = tile
+				G.current_player_connector = connector
 				G.available_moves -= 1
-				$PlayerCharacter.position = connector.get_global_position()
+				G.emit_signal("player_position_updated")
 				return
 			else:
 				G.print_test("points are not connected")
@@ -188,10 +202,10 @@ func _on_character_move_tried(tile, connector) -> void:
 			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
 				G.print_test("do move right")
 				G.current_player_position.x = tile_position.x
-				G.current_player_connector = connector
 				G.current_player_tile = tile
+				G.current_player_connector = connector
 				G.available_moves -= 1
-				$PlayerCharacter.position = connector.get_global_position()
+				G.emit_signal("player_position_updated")
 				return
 			else:
 				G.print_test("points are not connected")
@@ -204,10 +218,10 @@ func _on_character_move_tried(tile, connector) -> void:
 			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
 				G.print_test("do move down")
 				G.current_player_position.y = tile_position.y
-				G.current_player_connector = connector
 				G.current_player_tile = tile
+				G.current_player_connector = connector
 				G.available_moves -= 1
-				$PlayerCharacter.position = connector.get_global_position()
+				G.emit_signal("player_position_updated")
 				return
 			else:
 				G.print_test("points are not connected")

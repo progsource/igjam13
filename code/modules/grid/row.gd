@@ -50,63 +50,51 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 	
 	_new_tile.pos.x = 14 if is_left else 0
 	_new_tile.pos.y = a_row
+	G.print_test("starting new tile pos:")
+	G.print_test(_new_tile.pos)
 	
 	if is_left:
 		_old_tile = tile_container.get_child(0)
 		tile_container.add_child(_new_tile)
 		tile_container.remove_child(_old_tile)
-		for t in $HBoxContainer.get_children():
-			t.pos.x -= 1
+		
+		for t in range($HBoxContainer.get_children().size()):
+			if t == $HBoxContainer.get_children().size() - 1:
+				continue
+			$HBoxContainer.get_children()[t].pos.x -= 1
 	else:
 		_old_tile = tile_container.get_child((tile_container.get_child_count() - 1))
 		tile_container.add_child(_new_tile)
 		tile_container.move_child(_new_tile, 0)
 		tile_container.remove_child(_old_tile)
+		var first_skipped = false
 		for t in $HBoxContainer.get_children():
+			if not first_skipped:
+				first_skipped = true
+				continue
 			t.pos.x += 1
-	
+	G.print_test("current player pos:")
+	G.print_test(G.current_player_position)
+	G.print_test("a row: %d" % a_row)
 	if G.current_player_position.y == a_row:
 		if is_left:
 			if G.current_player_position.x == 0:
 				G.current_player_position.x = 14
-				G.current_player_tile = tile_container.get_child(14)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
 			else:
 				G.current_player_position.x -= 1
-				G.current_player_tile = tile_container.get_child(G.current_player_position.x)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
 		else:
 			if G.current_player_position.x == 14:
 				G.current_player_position.x = 0
-				G.current_player_tile = tile_container.get_child(0)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
 			else:
 				G.current_player_position.x += 1
-				G.current_player_tile = tile_container.get_child(G.current_player_position.x)
-				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
-				G.emit_signal("player_position_updated")
+		G.print_test("new player pos:")
+		G.print_test(G.current_player_position)
+		G.current_player_tile = tile_container.get_child(G.current_player_position.x)
+		G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+		G.emit_signal("player_position_updated")
+	G.print_test("new tile pos:")
+	G.print_test(_new_tile.pos)
 	_new_tile = null
-
-
-func has_tile(tile: Control) -> bool:
-	return has_node(tile.get_path())
-
-
-func get_tile_x_position(tile: Control) -> int:
-#	if not has_tile(tile):
-#		return -1
-	
-	var counter = -1
-	
-	for c in get_children():
-		counter += 1
-		if c == tile:
-			return counter
-	
-	return -1
 
 
 func get_tile_at_x_position(x: int) -> Control:
@@ -114,6 +102,7 @@ func get_tile_at_x_position(x: int) -> Control:
 
 
 func replace_tile_at_x_position(x: int, tile: Control) -> void:
+	tile.pos.x = x
 	tile.pos.y = row
 	$HBoxContainer.add_child(tile)
 	$HBoxContainer.move_child(tile, x)

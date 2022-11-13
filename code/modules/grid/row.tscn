@@ -94,14 +94,6 @@ margin_left = 504.0
 margin_right = 536.0
 pos = Vector2( 14, -1 )
 
-[node name="ScrollContainer" type="ScrollContainer" parent="."]
-visible = false
-margin_left = 572.0
-margin_right = 1072.0
-margin_bottom = 32.0
-rect_min_size = Vector2( 500, 0 )
-scroll_vertical_enabled = false
-
 [node name="ArrowRight" parent="." instance=ExtResource( 2 )]
 margin_left = 590.0
 margin_right = 622.0
