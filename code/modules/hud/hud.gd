@@ -5,6 +5,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	G.connect("available_moves_updated", self, "_on_available_moves_updated")
 	
+# warning-ignore:return_value_discarded
 	G.connect("game_state_updated", self, "_on_game_state_changed")
 # warning-ignore:return_value_discarded
 	$Top/Button.connect("button_up", self, "_on_next_turn_pressed")

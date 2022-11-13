@@ -54,7 +54,6 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 	if is_left:
 		_old_tile = tile_container.get_child(0)
 		tile_container.add_child(_new_tile)
-		$ScrollContainer.scroll_horizontal += 32 # TODO animate via process
 		tile_container.remove_child(_old_tile)
 		for t in $HBoxContainer.get_children():
 			t.pos.x -= 1
@@ -62,11 +61,34 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 		_old_tile = tile_container.get_child((tile_container.get_child_count() - 1))
 		tile_container.add_child(_new_tile)
 		tile_container.move_child(_new_tile, 0)
-		$ScrollContainer.scroll_horizontal -= 32
 		tile_container.remove_child(_old_tile)
 		for t in $HBoxContainer.get_children():
 			t.pos.x += 1
-
+	
+	if G.current_player_position.y == a_row:
+		if is_left:
+			if G.current_player_position.x == 0:
+				G.current_player_position.x = 14
+				G.current_player_tile = tile_container.get_child(14)
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+			else:
+				G.current_player_position.x -= 1
+				G.current_player_tile = tile_container.get_child(G.current_player_position.x)
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+		else:
+			if G.current_player_position.x == 14:
+				G.current_player_position.x = 0
+				G.current_player_tile = tile_container.get_child(0)
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+			else:
+				G.current_player_position.x += 1
+				G.current_player_tile = tile_container.get_child(G.current_player_position.x)
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+	_new_tile = null
 
 func has_tile(tile: Control) -> bool:
 	return has_node(tile.get_path())

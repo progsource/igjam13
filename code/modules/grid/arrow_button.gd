@@ -18,6 +18,7 @@ func _ready():
 	# warning-ignore:return_value_discarded
 	G.connect("arrow_buttons_enabled", self, "_on_arrow_buttons_enabled")
 	
+# warning-ignore:return_value_discarded
 	G.connect("game_state_updated", self, "_on_game_state_updated")
 
 

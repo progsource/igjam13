@@ -43,6 +43,7 @@ func move_column(pos_x: int, is_up: bool) -> void:
 	if _old_tile == null and _new_tile == null:
 		_new_tile = TileScene.instance()
 		_new_tile.possible_connections = 4
+		_new_tile.pos.x = pos_x
 	elif _old_tile != null:
 		_new_tile = _old_tile
 		_new_tile.pos.x = pos_x
@@ -57,15 +58,43 @@ func move_column(pos_x: int, is_up: bool) -> void:
 				break
 			tiles[t + 1].get_parent().remove_child(tiles[t + 1])
 			get_child(t).replace_tile_at_x_position(pos_x, tiles[t + 1])
-		tiles[0].get_parent().remove_child(tiles[0])
+			tiles[t] = tiles[t + 1]
+		_old_tile.get_parent().remove_child(_old_tile)
 		get_child(tiles.size() - 1).replace_tile_at_x_position(pos_x, _new_tile)
+		tiles[tiles.size() - 1] = _new_tile
 	else:
 		for t in [5, 4, 3, 2, 1]:
 			tiles[t - 1].get_parent().remove_child(tiles[t - 1])
 			get_child(t).replace_tile_at_x_position(pos_x, tiles[t - 1])
-		tiles[5].get_parent().remove_child(tiles[5])
+			tiles[t] = tiles[t - 1]
+		_old_tile.get_parent().remove_child(_old_tile)
 		get_child(0).replace_tile_at_x_position(pos_x, _new_tile)
-		
+		tiles[0] = _new_tile
+	
+	if G.current_player_position.x == pos_x:
+		if is_up:
+			if G.current_player_position.y == 0:
+				G.current_player_position.y = 5
+				G.current_player_tile = tiles[5]
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+			else:
+				G.current_player_position.y -= 1
+				G.current_player_tile = tiles[G.current_player_position.y]
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+		else:
+			if G.current_player_position.y == 5:
+				G.current_player_position.y = 0
+				G.current_player_tile = tiles[0]
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+			else:
+				G.current_player_position.y += 1
+				G.current_player_tile = tiles[G.current_player_position.y]
+				G.current_player_connector = G.current_player_tile.get_connector_by_enum(G.current_player_connector.connection_point)
+				G.emit_signal("player_position_updated")
+	_new_tile = null
 
 #func is_possible_move(tile, connector, is_player) -> bool:
 ##	if is_player:

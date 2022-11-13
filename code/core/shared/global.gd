@@ -15,6 +15,9 @@ signal character_move_tried(tile, connector)
 
 signal game_state_updated()
 
+# warning-ignore:unused_signal
+signal player_position_updated()
+
 
 enum GAME_STATE {
 	PAUSE,

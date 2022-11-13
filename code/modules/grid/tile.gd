@@ -372,3 +372,10 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			return false
 
 	return false
+
+
+func get_connector_by_enum(value: int) -> ColorRect:
+	if value < 0 or value >= _connectors.size():
+		return null
+	
+	return _connectors[value]

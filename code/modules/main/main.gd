@@ -23,8 +23,7 @@ func _ready():
 	G.connect("game_state_updated", self, "_on_game_state_updated")
 
 
-# warning-ignore:unused_argument
-func _on_goal_input(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+func _on_goal_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
 	if G.available_moves < 1:
 		return # failed ;p
 
@@ -150,15 +149,15 @@ func _on_character_move_tried(tile, connector) -> void:
 					G.print_test("points are not connected")
 					return
 		else:
-			G.print_test("move not possible")
+			G.print_test("move not possible - diagonal")
 	
 	if is_player_on_start:
 		# player can only move up from start
 		return
 	
 	if tile_position.y == player_position.y:
-		if tile_position.x == player_position.y:
-			G.print_test("move not possible")
+		if tile_position.x == player_position.x:
+			G.print_test("move not possible - no movement")
 		elif tile_position.x == player_position.x - 1:
 			G.print_test("trying to move left")
 			if tile.has_connection(connector.connection_point, G.current_player_tile, G.current_player_connector.connection_point):
@@ -186,7 +185,7 @@ func _on_character_move_tried(tile, connector) -> void:
 				G.print_test("points are not connected")
 				return
 		else:
-			G.print_test("move not possible")
+			G.print_test("move not possible - too far away")
 	elif tile_position.y == player_position.y + 1:
 		if tile_position.x == player_position.x:
 			G.print_test("trying to move down")
@@ -202,6 +201,6 @@ func _on_character_move_tried(tile, connector) -> void:
 				G.print_test("points are not connected")
 				return
 		else:
-			G.print_test("move not possible")
+			G.print_test("move not possible - diagonal")
 	else:
-		G.print_test("move not possible")
+		G.print_test("move not possible - too far away")
