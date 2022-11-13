@@ -24,11 +24,16 @@ func _on_game_state_changed() -> void:
 	match G.current_game_state:
 		G.GAME_STATE.PAUSE:
 			$Top/GameState.text = "PAUSE"
+			$Top/Button.disabled = true
 		G.GAME_STATE.PC_ROW_TURN:
 			$Top/GameState.text = "Move Row"
+			$Top/Button.disabled = true
 		G.GAME_STATE.PC_MOVE_TURN:
 			$Top/GameState.text = "Move PC"
+			$Top/Button.disabled = false
 		G.GAME_STATE.AI_ROW_TURN:
 			$Top/GameState.text = "AI Row"
+			$Top/Button.disabled = true
 		G.GAME_STATE.AI_MOVE_TURN:
 			$Top/GameState.text = "AI Move"
+			$Top/Button.disabled = true

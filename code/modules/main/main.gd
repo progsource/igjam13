@@ -10,7 +10,7 @@ func _ready():
 	$Goal.visible = false
 	
 	# warning-ignore:return_value_discarded
-	$PauseLayer/Panel/StartButton.connect("button_up", self, "_restart")
+	$PauseLayer/Panel/VBoxContainer/StartButton.connect("button_up", self, "_restart")
 	# warning-ignore:return_value_discarded
 	$Goal/StaticBody2D.connect("input_event", self, "_on_goal_input")
 	
@@ -21,6 +21,15 @@ func _ready():
 	
 	# warning-ignore:return_value_discarded
 	G.connect("game_state_updated", self, "_on_game_state_updated")
+	
+	# warning-ignore:return_value_discarded
+	G.connect("end_state", self, "_on_end_state_changed")
+
+
+func _on_end_state_changed(state: int) -> void:
+	var end_state = $PauseLayer/Panel/VBoxContainer/EndState
+	end_state.text = "YOU WON!" if state == G.GAME_END_STATE.WON else "GAME OVER!"
+	end_state.visible = true
 
 
 func _on_goal_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void:
@@ -36,6 +45,7 @@ func _on_goal_input(_viewport: Node, event: InputEvent, _shape_idx: int) -> void
 				other_connector == G.CONNECTION_POINTS.TOP_LEFT or
 				other_connector == G.CONNECTION_POINTS.TOP_RIGHT):
 			
+				G.emit_signal("end_state", G.GAME_END_STATE.WON)
 				$PauseLayer.visible = true
 
 
@@ -48,7 +58,7 @@ func _on_game_state_updated() -> void:
 
 
 func _restart() -> void:
-	$PauseLayer/Panel/StartButton.text = "Restart"
+	$PauseLayer/Panel/VBoxContainer/StartButton.text = "Restart"
 	G.available_moves = G.MAX_AVAILABLE_MOVES
 	G.current_player_tile = null
 	G.current_player_connector = null

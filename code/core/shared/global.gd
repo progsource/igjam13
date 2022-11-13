@@ -18,6 +18,12 @@ signal game_state_updated()
 # warning-ignore:unused_signal
 signal player_position_updated()
 
+enum GAME_END_STATE {
+	GAME_OVER,
+	WON,
+}
+signal end_state(state)
+
 
 enum GAME_STATE {
 	PAUSE,

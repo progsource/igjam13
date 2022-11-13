@@ -17,6 +17,7 @@ func _on_connector_pressed(tile, connector) -> void:
 	G.emit_signal("character_move_tried", tile, connector)
 	if G.available_moves <= 0:
 		G.current_game_state = G.GAME_STATE.PAUSE
+		G.emit_signal("end_state", G.GAME_END_STATE.GAME_OVER)
 
 
 func _on_player_position_updated() -> void:
