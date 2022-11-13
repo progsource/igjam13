@@ -17,6 +17,8 @@ func _ready():
 	
 	# warning-ignore:return_value_discarded
 	G.connect("arrow_buttons_enabled", self, "_on_arrow_buttons_enabled")
+	
+	G.connect("game_state_updated", self, "_on_game_state_updated")
 
 
 func _on_arrow_pressed():
@@ -25,3 +27,8 @@ func _on_arrow_pressed():
 
 func _on_arrow_buttons_enabled(enabled: bool) -> void:
 	disabled = !enabled
+
+
+func _on_game_state_updated() -> void:
+	if G.current_game_state == G.GAME_STATE.PC_ROW_TURN:
+		disabled = false

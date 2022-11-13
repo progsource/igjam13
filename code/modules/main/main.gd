@@ -1,16 +1,49 @@
 extends Node2D
 
 
+var goal_position := Vector2(-1, -1)
+
+
 func _ready():
 	$StartPosition.visible = false
 	$PlayerCharacter.visible = false
+	$Goal.visible = false
 	
 	# warning-ignore:return_value_discarded
 	$PauseLayer/Panel/StartButton.connect("button_up", self, "_restart")
+	# warning-ignore:return_value_discarded
+	$Goal/StaticBody2D.connect("input_event", self, "_on_goal_input")
 	
 	# warning-ignore:return_value_discarded
 	G.connect("arrow_button_pressed", self, "_on_arrow_button_pressed")
+	# warning-ignore:return_value_discarded
 	G.connect("character_move_tried", self, "_on_character_move_tried")
+	
+	# warning-ignore:return_value_discarded
+	G.connect("game_state_updated", self, "_on_game_state_updated")
+
+
+# warning-ignore:unused_argument
+func _on_goal_input(viewport: Node, event: InputEvent, shape_idx: int) -> void:
+	if G.available_moves < 1:
+		return # failed ;p
+
+	if event is InputEventMouseButton and event.button_index == BUTTON_LEFT and event.pressed:
+		if G.current_player_position.x == goal_position.x and G.current_player_position.y == goal_position.y + 1:
+			var other_connector = G.current_player_tile.get_connected_position(G.current_player_connector.connection_point)
+			
+			if (G.current_player_connector.connection_point == G.CONNECTION_POINTS.TOP_LEFT or
+				G.current_player_connector.connection_point == G.CONNECTION_POINTS.TOP_RIGHT or
+				other_connector == G.CONNECTION_POINTS.TOP_LEFT or
+				other_connector == G.CONNECTION_POINTS.TOP_RIGHT):
+			
+				$PauseLayer.visible = true
+
+
+func _on_game_state_updated() -> void:
+	if G.current_game_state == G.GAME_STATE.AI_ROW_TURN:
+		$Grid.move_column(G.rng.randi_range(0, 14), G.rng.randi_range(0,100) > 50)
+		G.current_game_state = G.GAME_STATE.PC_ROW_TURN # theoretically this would be the enemies move turn
 
 
 func _restart() -> void:
@@ -26,6 +59,7 @@ func _restart() -> void:
 	G.emit_signal("restart")
 	
 	_place_pc_start_position()
+	_place_goal_position()
 	
 	$PauseLayer.visible = false
 	
@@ -49,6 +83,17 @@ func _place_pc_start_position() -> void:
 	$PlayerCharacter.visible = true
 
 
+func _place_goal_position() -> void:
+	var x = G.rng.randi_range(0, 14)
+	var left_most_x := 68
+	var multiplier := 36
+	var start_pos = Vector2(left_most_x + multiplier * x, 71)
+	
+	goal_position.x = x
+	$Goal.position = start_pos
+	$Goal.visible = true
+
+
 func _start_pc_turn() -> void:
 	G.current_game_state = G.GAME_STATE.PC_ROW_TURN
 	G.emit_signal("arrow_buttons_enabled", true)
@@ -66,9 +111,15 @@ func _on_arrow_button_pressed(_row: int, is_left: bool) -> void:
 
 
 func _on_character_move_tried(tile, connector) -> void:
+	G.print_test("on try character move")
 	var tile_position = tile.pos
 	var player_position = G.current_player_position
 	var is_player_on_start = player_position.y == 6
+	
+	G.print_test("tile pos:")
+	G.print_test(tile_position)
+	G.print_test("player pos:")
+	G.print_test(player_position)
 
 	if tile_position.y == player_position.y - 1:
 		if tile_position.x == player_position.x:

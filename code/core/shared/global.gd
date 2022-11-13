@@ -13,6 +13,8 @@ signal connector_pressed(connector_tile, connector)
 # warning-ignore:unused_signal
 signal character_move_tried(tile, connector)
 
+signal game_state_updated()
+
 
 enum GAME_STATE {
 	PAUSE,
@@ -43,7 +45,7 @@ onready var rng := RandomNumberGenerator.new()
 var available_moves := 0 setget set_available_moves
 
 
-var current_game_state = GAME_STATE.PAUSE
+var current_game_state = GAME_STATE.PAUSE setget set_current_game_state
 var current_player_tile = null
 var current_player_connector = null
 var current_player_position := Vector2(-1, -1)
@@ -59,6 +61,11 @@ func _ready():
 func set_available_moves(value: int) -> void:
 	available_moves = value
 	emit_signal("available_moves_updated")
+
+
+func set_current_game_state(value: int) -> void:
+	current_game_state = value
+	emit_signal("game_state_updated")
 
 
 func print_test(s) -> void:

@@ -37,6 +37,7 @@ func _ready():
 
 
 func _initialize_connections() -> void:
+	connections = []
 	var available_connections := []
 	available_connections.resize(G.CONNECTION_POINTS.size())
 	for i in range(0, G.CONNECTION_POINTS.size()):
@@ -295,6 +296,11 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 	var additional_connector = get_connected_position(connector)
 	var additional_other_connector = other_tile.get_connected_position(other_connector)
 	
+	G.print_test("tile pos:")
+	G.print_test(pos)
+	G.print_test("other pos:")
+	G.print_test(other_tile.pos)
+	
 	if other_tile.pos.x == pos.x:
 		if other_tile.pos.y == pos.y - 1:
 			# self is down
@@ -303,6 +309,11 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			var is_bottom_right = other_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT or additional_other_connector == G.CONNECTION_POINTS.BOTTOM_RIGHT
 			var is_top_left = connector == G.CONNECTION_POINTS.TOP_LEFT or additional_connector == G.CONNECTION_POINTS.TOP_LEFT
 			var is_top_right = connector == G.CONNECTION_POINTS.TOP_RIGHT or additional_connector == G.CONNECTION_POINTS.TOP_RIGHT
+
+			G.print_test("is_bottom_left: %s" % is_bottom_left)
+			G.print_test("is_bottom_right: %s" % is_bottom_left)
+			G.print_test("is_top_left: %s" % is_top_left)
+			G.print_test("is_top_right: %s" % is_top_right)
 
 			if (is_bottom_left and is_top_left) or (is_bottom_right and is_top_right):
 				return true
@@ -316,6 +327,11 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			var is_top_left = other_connector == G.CONNECTION_POINTS.TOP_LEFT or additional_other_connector == G.CONNECTION_POINTS.TOP_LEFT
 			var is_top_right = other_connector == G.CONNECTION_POINTS.TOP_RIGHT or additional_other_connector == G.CONNECTION_POINTS.TOP_RIGHT
 
+			G.print_test("is_bottom_left: %s" % is_bottom_left)
+			G.print_test("is_bottom_right: %s" % is_bottom_left)
+			G.print_test("is_top_left: %s" % is_top_left)
+			G.print_test("is_top_right: %s" % is_top_right)
+
 			if (is_bottom_left and is_top_left) or (is_bottom_right and is_top_right):
 				return true
 		else:
@@ -328,6 +344,11 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			var is_right_top = other_connector == G.CONNECTION_POINTS.RIGHT_TOP or additional_other_connector == G.CONNECTION_POINTS.RIGHT_TOP
 			var is_right_bottom = other_connector == G.CONNECTION_POINTS.RIGHT_BOTTOM or additional_other_connector == G.CONNECTION_POINTS.RIGHT_BOTTOM
 			
+			G.print_test("is_left_top: %s" % is_left_top)
+			G.print_test("is_left_bottom: %s" % is_left_bottom)
+			G.print_test("is_right_top: %s" % is_right_top)
+			G.print_test("is_right_bottom: %s" % is_right_bottom)
+			
 			if (is_left_top and is_right_top) or (is_left_bottom and is_right_bottom):
 				return true
 		else:
@@ -339,6 +360,11 @@ func has_connection(connector: int, other_tile: Control, other_connector: int) -
 			var is_left_bottom = other_connector == G.CONNECTION_POINTS.LEFT_BOTTOM or additional_other_connector == G.CONNECTION_POINTS.LEFT_BOTTOM
 			var is_right_top = connector == G.CONNECTION_POINTS.RIGHT_TOP or additional_connector == G.CONNECTION_POINTS.RIGHT_TOP
 			var is_right_bottom = connector == G.CONNECTION_POINTS.RIGHT_BOTTOM or additional_connector == G.CONNECTION_POINTS.RIGHT_BOTTOM
+			
+			G.print_test("is_left_top: %s" % is_left_top)
+			G.print_test("is_left_bottom: %s" % is_left_bottom)
+			G.print_test("is_right_top: %s" % is_right_top)
+			G.print_test("is_right_bottom: %s" % is_right_bottom)
 			
 			if (is_left_top and is_right_top) or (is_left_bottom and is_right_bottom):
 				return true

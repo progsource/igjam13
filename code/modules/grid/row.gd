@@ -19,6 +19,13 @@ func _ready():
 	G.connect("arrow_button_pressed", self, "_on_arrow_button_pressed")
 
 
+func _exit_tree():
+	if _old_tile != null:
+		_old_tile.queue_free()
+	if _new_tile != null:
+		_new_tile.queue_free()
+
+
 func set_row(value: int) -> void:
 	row = value
 	$ArrowLeft.row = row
@@ -41,6 +48,8 @@ func _on_arrow_button_pressed(a_row: int, is_left: bool) -> void:
 		_new_tile = _old_tile
 		_new_tile.pos.x = 14 if is_left else 0
 		_old_tile = null
+		
+	_new_tile.pos.y = a_row
 	
 	if is_left:
 		_old_tile = tile_container.get_child(0)
@@ -79,3 +88,9 @@ func get_tile_x_position(tile: Control) -> int:
 
 func get_tile_at_x_position(x: int) -> Control:
 	return $HBoxContainer.get_child(x) as Control
+
+
+func replace_tile_at_x_position(x: int, tile: Control) -> void:
+	tile.pos.y = row
+	$HBoxContainer.add_child(tile)
+	$HBoxContainer.move_child(tile, x)
